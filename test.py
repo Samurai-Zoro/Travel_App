@@ -21,9 +21,20 @@ st.set_page_config(
 # =========================================================
 # Load Model
 # =========================================================
-model = joblib.load("travel_country_model.pkl")
-label_enc = joblib.load("label_encoder.pkl")
-model_columns = joblib.load("model_columns.pkl")
+@st.cache_resource
+def load_model_files():
+    model = joblib.load("travel_country_model.pkl")
+    label_enc = joblib.load("label_encoder.pkl")
+    model_columns = joblib.load("model_columns.pkl")
+    return model, label_enc, model_columns
+
+
+try:
+    model, label_enc, model_columns = load_model_files()
+except Exception as e:
+    st.error("The model files could not be loaded.")
+    st.exception(e)
+    st.stop()
 
 
 # =========================================================
